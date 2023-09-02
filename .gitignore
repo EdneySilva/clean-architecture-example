@@ -1,0 +1,13 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/VaultApp/.vs
+/VaultApp/VaultAppApi/obj
+/VaultApp/VaultApplication/obj
+/VaultApp/VaultDomain/obj
+/VaultApp/VaultInfrastructure/obj
+/VaultApp/VaultAppApi/bin/Debug/net7.0
+/VaultApp/VaultApplication/bin/Debug/net7.0
+/VaultApp/VaultDomain/bin/Debug/net7.0
+/VaultApp/VaultInfrastructure/bin/Debug/net7.0
