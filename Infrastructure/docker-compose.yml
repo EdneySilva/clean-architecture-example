@@ -1,0 +1,21 @@
+version: "3"
+
+networks:
+  local-network:
+    driver: bridge
+
+services:
+  vault-mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: vault-mssql
+    environment:
+      - SA_PASSWORD=1234Test!
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+    networks:
+      - local-network
+    volumes:
+      - ./deploy/dbinit.sql:/tmp/dbinit.sql
+      - ./deploy/init-db.sh:/tmp/init-db.sh
+    command: /bin/bash ./tmp/init-db.sh
