@@ -1,3 +1,7 @@
+using VaultApplication.DependencyInjections;
+using VaultDomain.DependencyInjection;
+using VaultInfrastructure.DependencyInjection;
+
 namespace VaultAppApi
 {
     public class Program
@@ -9,6 +13,9 @@ namespace VaultAppApi
             // Add services to the container.
 
             builder.Services.AddControllers();
+            builder.Services.AddDomainDependencies();
+            builder.Services.AddVaultApplication();
+            builder.Services.AddVaultStorageSql(builder.Configuration.GetConnectionString("DefaultConnectionString"));
 
             var app = builder.Build();
 
