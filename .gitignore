@@ -12,3 +12,4 @@
 /VaultApp/VaultDomain/bin/Debug/net7.0
 /VaultApp/VaultInfrastructure/bin/Debug/net7.0
 /.vs
+/VaultApp/VaultAppApi/VaultAppApi.csproj.user
