@@ -29,7 +29,9 @@ namespace VaultAppApi.Controllers
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterUserCommand registerUser)
         {
             var commandResult = await _mediator.Send(registerUser);
-            if(!commandResult.Success)
+            if (commandResult.Metadata.Errors.Any(a => a.ToLower().Contains("user with same user name")))
+                return Conflict(commandResult);
+            if (!commandResult.Success)
                 return BadRequest(commandResult.Metadata.Errors);
             return Ok(commandResult);
         }
