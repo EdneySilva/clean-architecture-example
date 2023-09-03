@@ -21,7 +21,7 @@ namespace VaultAppApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAsync()
         {
             var user = this.User.Identity!.Name;
             var secrets = await _mediator.Send(new UserSecretsQuery(user));
@@ -29,7 +29,7 @@ namespace VaultAppApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreateSecretCommand command)
+        public async Task<IActionResult> PostAsync([FromBody] CreateSecretCommand command)
         {
             var user = this.User.Identity!.Name;            
             var secrets = await _mediator.Send(new CreateSecretCommand(user, command.Name, command.Value));
@@ -37,7 +37,7 @@ namespace VaultAppApi.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] UpdateSecretCommand command)
+        public async Task<IActionResult> PutAsync([FromBody] UpdateSecretCommand command)
         {
             var user = this.User.Identity!.Name;
             var secrets = await _mediator.Send(new UpdateSecretCommand(user, command.Name, command.Value));
@@ -47,7 +47,7 @@ namespace VaultAppApi.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] DeleteSecretCommand command)
+        public async Task<IActionResult> DeleteAsync([FromBody] DeleteSecretCommand command)
         {
             var user = this.User.Identity!.Name;
             var secrets = await _mediator.Send(new DeleteSecretCommand(user, command.Name));
