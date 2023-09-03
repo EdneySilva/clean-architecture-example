@@ -13,3 +13,5 @@
 /VaultApp/VaultInfrastructure/bin/Debug/net7.0
 /.vs
 /VaultApp/VaultAppApi/VaultAppApi.csproj.user
+/VaultApp/VaultDomain.Tests/bin/Debug/net7.0
+/VaultApp/VaultDomain.Tests/obj
