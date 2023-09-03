@@ -25,6 +25,8 @@ namespace VaultAppApi.Controllers
         {
             var user = this.User.Identity!.Name;
             var secrets = await _mediator.Send(new UserSecretsQuery(user));
+            if (!secrets.Success)
+                return BadRequest(secrets);
             return Ok(secrets);
         }
 
@@ -33,6 +35,8 @@ namespace VaultAppApi.Controllers
         {
             var user = this.User.Identity!.Name;            
             var secrets = await _mediator.Send(new CreateSecretCommand(user, command.Name, command.Value));
+            if(!secrets.Success) 
+                return BadRequest(secrets);
             return Ok(secrets);
         }
 
@@ -43,6 +47,8 @@ namespace VaultAppApi.Controllers
             var secrets = await _mediator.Send(new UpdateSecretCommand(user, command.Name, command.Value));
             if (secrets.Metadata.Errors.Any(a => a.ToLower().Contains("not found")))
                 return NotFound(secrets);
+            if (!secrets.Success)
+                return BadRequest(secrets);
             return Ok(secrets);
         }
 
@@ -53,6 +59,8 @@ namespace VaultAppApi.Controllers
             var secrets = await _mediator.Send(new DeleteSecretCommand(user, command.Name));
             if (secrets.Metadata.Errors.Any(a => a.ToLower().Contains("not found")))
                 return NotFound(secrets);
+            if (!secrets.Success)
+                return BadRequest(secrets);
             return Ok(secrets);
         }
     }
