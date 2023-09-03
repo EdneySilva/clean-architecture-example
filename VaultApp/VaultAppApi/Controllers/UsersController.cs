@@ -29,6 +29,8 @@ namespace VaultAppApi.Controllers
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterUserCommand registerUser)
         {
             var commandResult = await _mediator.Send(registerUser);
+            if(!commandResult.Success)
+                return BadRequest(commandResult.Metadata.Errors);
             return Ok(commandResult);
         }
 
