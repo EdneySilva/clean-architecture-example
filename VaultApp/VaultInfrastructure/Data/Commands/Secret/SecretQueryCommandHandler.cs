@@ -5,7 +5,9 @@ using VaultDomain.ValueObjects;
 
 namespace VaultInfrastructure.Data.Commands.Secret
 {
-    internal class SecretQueryCommandHandler : BaseStorageCommandHandler<UserSecretsQuery, Result>
+    internal class SecretQueryCommandHandler :
+        BaseStorageCommandHandler<UserSecretsQuery, Result>,
+        IRequestHandler<UserSecretBySecretNameQuery, VaultDomain.Entities.Secret>
     {
         public SecretQueryCommandHandler(DbConnectionString connectionString, IMediator mediator) : base(connectionString, mediator)
         {
@@ -23,8 +25,8 @@ namespace VaultInfrastructure.Data.Commands.Secret
                         UserName = request.Owner
                     });
                     var result = new Result(
-                        new 
-                        { 
+                        new
+                        {
                             TotalRecords = queryResult.Count(),
                             Items = queryResult
                         }
@@ -37,6 +39,20 @@ namespace VaultInfrastructure.Data.Commands.Secret
             catch (Exception ex)
             {
                 return new Result(ex);
+            }
+        }
+
+        public async Task<VaultDomain.Entities.Secret> Handle(UserSecretBySecretNameQuery request, CancellationToken cancellationToken)
+        {
+            using (var connection = CreateConnection())
+            {
+                var query = "SELECT * FROM [Secrets] WHERE [Owner] = @UserName and SecretName = @SecretName";
+                var queryResult = await connection.QueryFirstOrDefaultAsync<VaultDomain.Entities.Secret>(query, new
+                {
+                    UserName = request.Owner,
+                    request.SecretName
+                });
+                return queryResult;
             }
         }
     }
