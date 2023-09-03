@@ -9,6 +9,7 @@ using VaultDomain.ValueObjects;
 
 namespace VaultAppApi.Controllers
 {
+
     [ApiController]
     [Route("[controller]")]
     public class UsersController : ControllerBase

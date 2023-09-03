@@ -40,6 +40,12 @@
             return this;
         }
 
+        public Result WithWarning(string warning)
+        {
+            Metadata.AnotateWarning(warning);
+            return this;
+        }
+
         public Result WithError(string error)
         {
             Metadata.AnotateError(error);
