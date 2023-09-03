@@ -33,7 +33,7 @@ namespace VaultAppApi.Controllers
         }
 
         [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate([FromBody] AuthenticateUserCommand command)
+        public async Task<IActionResult> AuthenticateAsync([FromBody] AuthenticateUserCommand command)
         {
             var commandResult = await _mediator.Send(command);
             if (commandResult.Success)
