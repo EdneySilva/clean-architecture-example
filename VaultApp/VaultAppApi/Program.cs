@@ -1,3 +1,4 @@
+using VaultAppApi.Extensions.Security;
 using VaultApplication.DependencyInjections;
 using VaultDomain.DependencyInjection;
 using VaultInfrastructure.DependencyInjection;
@@ -13,6 +14,7 @@ namespace VaultAppApi
             // Add services to the container.
 
             builder.Services.AddControllers();
+            builder.Services.ConfigureJwtAuthentication(builder.Configuration.GetSection("Token").Get<string>());
             builder.Services.AddDomainDependencies();
             builder.Services.AddVaultApplication();
             builder.Services.AddVaultStorageSql(builder.Configuration.GetConnectionString("DefaultConnectionString"));
