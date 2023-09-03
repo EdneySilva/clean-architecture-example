@@ -1,7 +1,11 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using VaultAppApi.Extensions.Security;
 using VaultApplication.Users.Commands;
+using VaultDomain.Commands.AuthenticateUser;
 using VaultDomain.Commands.RegisterUser;
+using VaultDomain.ValueObjects;
 
 namespace VaultAppApi.Controllers
 {
@@ -10,11 +14,13 @@ namespace VaultAppApi.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IConfiguration _configuration;
         private readonly ILogger<UsersController> _logger;
 
-        public UsersController(IMediator mediator, ILogger<UsersController> logger)
+        public UsersController(IMediator mediator, IConfiguration configuration, ILogger<UsersController> logger)
         {
             _mediator = mediator;
+            _configuration = configuration;
             _logger = logger;
         }
 
@@ -23,6 +29,20 @@ namespace VaultAppApi.Controllers
         {
             var commandResult = await _mediator.Send(registerUser);
             return Ok(commandResult);
+        }
+
+        [HttpPost("authenticate")]
+        public async Task<IActionResult> Authenticate([FromBody] AuthenticateUserCommand command)
+        {
+            var commandResult = await _mediator.Send(command);
+            if (commandResult.Success)
+                return Ok(new Result(new
+                {
+                    Token = ((VaultDomain.Entities.User)commandResult.Payload).ExtractJwt(
+                        _configuration.GetSection("Token").Value
+                    )
+                }));
+            return BadRequest(commandResult);
         }
     }
 }
