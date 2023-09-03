@@ -8,6 +8,7 @@ namespace VaultDomain.Commands.UpdateSecret
         public UpdateSecretValidator()
         {
             RuleFor(v => v.Owner).NotEmpty().EmailAddress();
+            RuleFor(v => v.Name).NotEmpty();
             RuleFor(v => v.Value).NotEmpty();
         }
     }

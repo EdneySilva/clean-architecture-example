@@ -6,7 +6,7 @@
 
         public DateTime CreatedAt { get; set; }
 
-        protected void AddEvent(BaseEvent baseEvent)
+        internal void AddEvent(BaseEvent baseEvent)
         {
             _events.Add(baseEvent);
         }
