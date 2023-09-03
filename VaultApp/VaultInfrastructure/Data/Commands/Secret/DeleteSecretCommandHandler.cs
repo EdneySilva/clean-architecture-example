@@ -2,38 +2,24 @@
 using MediatR;
 using VaultDomain.Commands.DeleteSecret;
 using VaultDomain.ValueObjects;
+using VaultInfrastructure.Data.Abstractions;
+using VaultInfrastructure.Data.SqlQueries.Secret;
 
 namespace VaultInfrastructure.Data.Commands.Secret
 {
     internal class DeleteSecretCommandHandler : BaseStorageCommandHandler<DeleteSecretCommand, Result>
     {
-        public DeleteSecretCommandHandler(DbConnectionString connectionString, IMediator mediator) : base(connectionString, mediator)
+        private readonly IRepository<VaultDomain.Entities.Secret> _secretRepository;
+
+        public DeleteSecretCommandHandler(DbConnectionString connectionString, IRepository<VaultDomain.Entities.Secret> secretRepository, IMediator mediator) : base(connectionString, mediator)
         {
+            _secretRepository = secretRepository;
         }
 
         public override async Task<Result> Handle(DeleteSecretCommand request, CancellationToken cancellationToken)
         {
-            using (var connection = this.CreateConnection())
-            {
-                try
-                {
-                    var secret = request.Materialize();
-                    var sql = "DELETE FROM [Secrets] WHERE Id = @Id";
-                    await DispatchAllEvents(secret.TakeEvents());
-                    var affectedRows = await connection.ExecuteAsync(sql, new
-                    {
-                        secret.Id,
-                        secret.SecretValue
-                    });
-                    if (affectedRows > 0)
-                        return new Result().WithInfo("Secret deleted successfully");
-                    return new Result().WithWarning("Something went wrong while try to delete the secret.\nNo data saved");
-                }
-                catch (Exception ex)
-                {
-                    return new Result(ex).WithWarning("An error happened during delete the secret");
-                }
-            }
+            var secret = request.Materialize();
+            return await _secretRepository.DeleteAsync(new DeleteSecretSqlQuery(secret));
         }
     }
 }

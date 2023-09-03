@@ -4,6 +4,7 @@ using System.Reflection;
 using VaultDomain.Commands.RegisterUser;
 using VaultDomain.ValueObjects;
 using VaultInfrastructure.Data;
+using VaultInfrastructure.Data.Abstractions;
 using VaultInfrastructure.Data.Commands.User;
 
 namespace VaultInfrastructure.DependencyInjection
@@ -13,6 +14,7 @@ namespace VaultInfrastructure.DependencyInjection
         public static IServiceCollection AddVaultStorageSql(this IServiceCollection services, string connectionString)
         {
             services.AddSingleton(new DbConnectionString(connectionString));
+            services.AddSingleton(typeof(IRepository<>), typeof(SqlDapperRepository<>));
             services.AddScoped<IRequestHandler<RegisterUserCommand, Result>, RegisterUserCommandHandler>();
             services.AddMediatR(cfg => {
                 cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
