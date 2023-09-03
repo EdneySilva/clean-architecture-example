@@ -1,7 +1,8 @@
-﻿using Dapper;
-using MediatR;
+﻿using MediatR;
 using VaultDomain.Queries.Secret;
 using VaultDomain.ValueObjects;
+using VaultInfrastructure.Data.Abstractions;
+using VaultInfrastructure.Data.SqlQueries.Secret;
 
 namespace VaultInfrastructure.Data.Commands.Secret
 {
@@ -9,51 +10,21 @@ namespace VaultInfrastructure.Data.Commands.Secret
         BaseStorageCommandHandler<UserSecretsQuery, Result>,
         IRequestHandler<UserSecretBySecretNameQuery, VaultDomain.Entities.Secret>
     {
-        public SecretQueryCommandHandler(DbConnectionString connectionString, IMediator mediator) : base(connectionString, mediator)
+        private readonly IRepository<VaultDomain.Entities.Secret> _secretRepository;
+
+        public SecretQueryCommandHandler(DbConnectionString connectionString, IRepository<VaultDomain.Entities.Secret> secretRepository, IMediator mediator) : base(connectionString, mediator)
         {
+            _secretRepository = secretRepository;
         }
 
         public override async Task<Result> Handle(UserSecretsQuery request, CancellationToken cancellationToken)
         {
-            try
-            {
-                using (var connection = CreateConnection())
-                {
-                    var query = "SELECT * FROM [Secrets] WHERE [Owner] = @UserName";
-                    var queryResult = await connection.QueryAsync<VaultDomain.Entities.Secret>(query, new
-                    {
-                        UserName = request.Owner
-                    });
-                    var result = new Result(
-                        new
-                        {
-                            TotalRecords = queryResult.Count(),
-                            Items = queryResult
-                        }
-                    );
-                    if (!queryResult.Any())
-                        result.WithWarning("0 records found.");
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                return new Result(ex);
-            }
+            return await _secretRepository.SelectAsync(new UserSecretsSqlQuery(new VaultDomain.Entities.Secret { Owner = request.Owner }));
         }
 
         public async Task<VaultDomain.Entities.Secret> Handle(UserSecretBySecretNameQuery request, CancellationToken cancellationToken)
         {
-            using (var connection = CreateConnection())
-            {
-                var query = "SELECT * FROM [Secrets] WHERE [Owner] = @UserName and SecretName = @SecretName";
-                var queryResult = await connection.QueryFirstOrDefaultAsync<VaultDomain.Entities.Secret>(query, new
-                {
-                    UserName = request.Owner,
-                    request.SecretName
-                });
-                return queryResult;
-            }
+            return await _secretRepository.FirstOrDefaultAsync(new UserSecretsBySecretNameSqlQuery(new VaultDomain.Entities.Secret { Owner = request.Owner, SecretName = request.SecretName }));
         }
     }
 }

@@ -1,39 +1,23 @@
-﻿using Dapper;
-using MediatR;
+﻿using MediatR;
 using VaultDomain.Commands.UpdateSecret;
 using VaultDomain.ValueObjects;
+using VaultInfrastructure.Data.Abstractions;
+using VaultInfrastructure.Data.SqlQueries.Secret;
 
 namespace VaultInfrastructure.Data.Commands.Secret
 {
     internal class UpdateSecretCommandHandler : BaseStorageCommandHandler<UpdateSecretCommand, Result>
     {
-        public UpdateSecretCommandHandler(DbConnectionString connectionString, IMediator mediator) : base(connectionString, mediator)
+        private readonly IRepository<VaultDomain.Entities.Secret> _secretRepository;
+        public UpdateSecretCommandHandler(DbConnectionString connectionString, IRepository<VaultDomain.Entities.Secret> secretRepository,  IMediator mediator) : base(connectionString, mediator)
         {
+            _secretRepository = secretRepository;
         }
 
         public override async Task<Result> Handle(UpdateSecretCommand request, CancellationToken cancellationToken)
         {
-            using (var connection = this.CreateConnection())
-            {
-                try
-                {
-                    var secret = request.Materialize();
-                    var sql = "UPDATE [Secrets] SET SecretValue = @SecretValue WHERE Id = @Id";
-                    await DispatchAllEvents(secret.TakeEvents());
-                    var affectedRows = await connection.ExecuteAsync(sql, new
-                    {
-                        secret.Id,
-                        secret.SecretValue
-                    });
-                    if (affectedRows > 0)
-                        return new Result().WithInfo("Secret update successfully");
-                    return new Result().WithWarning("Something went wrong while try to save the secret.\nNo data saved");
-                }
-                catch (Exception ex)
-                {
-                    return new Result(ex).WithWarning("An error happened during save the secret");
-                }
-            }
+            var secret = request.Materialize();
+            return await _secretRepository.UpdateAsync(new UpdateSecretSqlQuery(secret));
         }
     }
 }
