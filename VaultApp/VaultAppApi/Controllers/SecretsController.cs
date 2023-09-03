@@ -35,7 +35,9 @@ namespace VaultAppApi.Controllers
         {
             var user = this.User.Identity!.Name;            
             var secrets = await _mediator.Send(new CreateSecretCommand(user, command.Name, command.Value));
-            if(!secrets.Success) 
+            if (secrets.Metadata.Errors.Any(a => a.ToLower().Contains("secret with the name")))
+                return Conflict(secrets);
+            if (!secrets.Success) 
                 return BadRequest(secrets);
             return Ok(secrets);
         }
