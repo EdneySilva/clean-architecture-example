@@ -1,7 +1,14 @@
-﻿namespace VaultDomain.Entities
+﻿using VaultDomain.Events;
+
+namespace VaultDomain.Entities
 {
     public class Secret : BaseEntity
     {
+        public Secret()
+        {
+            AddEvent(new SecretCreated(this));
+        }
+
         public Guid Id { get; set; }
         public string SecretName { get; set; }
         public string SecretValue { get; set; }

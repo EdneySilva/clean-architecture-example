@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using MediatR;
 using VaultDomain.Entities;
 using VaultDomain.ValueObjects;
 
