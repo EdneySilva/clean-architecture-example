@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using VaultApplication.Behaviors;
 using VaultApplication.Users.Commands;
+using VaultDomain.Commands.AuthenticateUser;
 using VaultDomain.Commands.RegisterUser;
 using VaultDomain.ValueObjects;
 
@@ -16,6 +17,7 @@ namespace VaultApplication.DependencyInjections
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddMediatR(cfg => {
                 cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+                cfg.AddBehavior(typeof(IPipelineBehavior<AuthenticateUserCommand, Result>), typeof(ValidationBehaviour<AuthenticateUserCommand>));
                 cfg.AddBehavior(typeof(IPipelineBehavior<RegisterUserCommand, Result>), typeof(ValidationBehaviour<RegisterUserCommand>));
                 cfg.AddBehavior(typeof(IPipelineBehavior<RegisterUserCommand, Result>), typeof(RegisterUserCommandHandler));
             });
