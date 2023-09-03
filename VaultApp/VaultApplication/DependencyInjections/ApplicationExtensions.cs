@@ -8,6 +8,7 @@ using VaultApplication.Users.Commands;
 using VaultDomain.Commands.AuthenticateUser;
 using VaultDomain.Commands.CreateSecret;
 using VaultDomain.Commands.RegisterUser;
+using VaultDomain.Commands.UpdateSecret;
 using VaultDomain.ValueObjects;
 
 namespace VaultApplication.DependencyInjections
@@ -24,6 +25,9 @@ namespace VaultApplication.DependencyInjections
                 cfg.AddBehavior(typeof(IPipelineBehavior<RegisterUserCommand, Result>), typeof(RegisterUserCommandHandler));
                 cfg.AddBehavior(typeof(IPipelineBehavior<CreateSecretCommand, Result>), typeof(ValidationBehaviour<CreateSecretCommand>));
                 cfg.AddBehavior(typeof(IPipelineBehavior<CreateSecretCommand, Result>), typeof(CreateSecretCommandHandler));
+
+                cfg.AddBehavior(typeof(IPipelineBehavior<UpdateSecretCommand, Result>), typeof(ValidationBehaviour<UpdateSecretCommand>));
+                cfg.AddBehavior(typeof(IPipelineBehavior<UpdateSecretCommand, Result>), typeof(UpdateSecretCommandHandler));
             });
             return services;
         }

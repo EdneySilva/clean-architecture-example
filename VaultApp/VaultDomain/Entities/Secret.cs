@@ -9,6 +9,12 @@ namespace VaultDomain.Entities
             AddEvent(new SecretCreated(this));
         }
 
+        public Secret(Guid id)
+        {
+            Id = id;
+            AddEvent(new SecretUpdated(this));
+        }
+
         public Guid Id { get; set; }
         public string SecretName { get; set; }
         public string SecretValue { get; set; }
