@@ -19,6 +19,7 @@ namespace VaultInfrastructure.Data.Commands.Secret
         public override async Task<Result> Handle(DeleteSecretCommand request, CancellationToken cancellationToken)
         {
             var secret = request.Materialize();
+            await DispatchAllEvents(secret.TakeEvents());
             return await _secretRepository.DeleteAsync(new DeleteSecretSqlQuery(secret));
         }
     }
