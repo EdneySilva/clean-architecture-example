@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using VaultApplication.Services;
 using VaultDomain.Commands.RegisterUser;
-using VaultDomain.Entities;
 using VaultDomain.Queries.User;
 using VaultDomain.ValueObjects;
 

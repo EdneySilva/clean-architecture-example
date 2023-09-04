@@ -6,7 +6,7 @@ using VaultDomain.ValueObjects;
 
 namespace VaultApplication.Users.Commands
 {
-    internal class AuthenticationUserCommandHandler : IRequestHandler<AuthenticateUserCommand, Result>
+    public class AuthenticationUserCommandHandler : IRequestHandler<AuthenticateUserCommand, Result>
     {
         private readonly IMediator _mediator;
 
