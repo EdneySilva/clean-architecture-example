@@ -18,6 +18,7 @@ namespace VaultInfrastructure.Data.Commands.User
         public override async Task<Result> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
             var user = request.AsMaterializedUser();
+            await DispatchAllEvents(user.TakeEvents());
             return await _repository.InsertAsync(new RegisterUserSqlQuery(user));
         }
     }

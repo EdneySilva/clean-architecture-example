@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VaultDomain", "VaultDomain\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{022A6B7D-E35A-4849-9CC6-A917A521F834}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VaultDomain.Tests", "VaultDomain.Tests\VaultDomain.Tests.csproj", "{9B0ADBCA-8E1C-4934-AAEA-F6280BF618FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VaultDomain.Tests", "VaultDomain.Tests\VaultDomain.Tests.csproj", "{9B0ADBCA-8E1C-4934-AAEA-F6280BF618FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VaultInfrastructure.Tests", "VaultInfrastructure.Tests\VaultInfrastructure.Tests.csproj", "{31C1EA9D-85FD-44AC-A922-DAD46D436E41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,12 +43,17 @@ Global
 		{9B0ADBCA-8E1C-4934-AAEA-F6280BF618FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B0ADBCA-8E1C-4934-AAEA-F6280BF618FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B0ADBCA-8E1C-4934-AAEA-F6280BF618FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31C1EA9D-85FD-44AC-A922-DAD46D436E41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31C1EA9D-85FD-44AC-A922-DAD46D436E41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31C1EA9D-85FD-44AC-A922-DAD46D436E41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31C1EA9D-85FD-44AC-A922-DAD46D436E41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9B0ADBCA-8E1C-4934-AAEA-F6280BF618FE} = {022A6B7D-E35A-4849-9CC6-A917A521F834}
+		{31C1EA9D-85FD-44AC-A922-DAD46D436E41} = {022A6B7D-E35A-4849-9CC6-A917A521F834}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C3047A5D-F329-4252-BBAB-11A289EBB1BD}
