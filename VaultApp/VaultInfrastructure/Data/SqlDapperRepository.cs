@@ -27,13 +27,17 @@ namespace VaultInfrastructure.Data
                 {
                     var affectedRows = await ExecuteAsync(connection, command);
                     if (affectedRows > 0)
-                        return new Result().WithInfo($"{typeof(TEntity).Name} created successfully");
-                    return new Result().WithWarning($"Something went wrong while try to save the {typeof(TEntity).Name}.\nNo data saved");
+                        return new Result(command.Parameters).WithInfo($"{typeof(TEntity).Name} created successfully");
+                    return new Result(command.Parameters).WithWarning($"Something went wrong while try to save the {typeof(TEntity).Name}.\nNo data saved");
                 }
                 catch (Exception ex)
                 {
                     return new Result(ex)
                         .WithWarning($"An error happened when try to execute the command to insert {typeof(TEntity).Name}");
+                }
+                finally
+                {
+                    await connection.CloseAsync();
                 }
             }
         }
@@ -54,6 +58,10 @@ namespace VaultInfrastructure.Data
                     return new Result(ex)
                         .WithWarning($"An error happened when try to execute the command to update {typeof(TEntity).Name}");
                 }
+                finally
+                {
+                    await connection.CloseAsync();
+                }
             }
         }
 
@@ -73,6 +81,10 @@ namespace VaultInfrastructure.Data
                     return new Result(ex)
                         .WithWarning($"An error happened when try to execute the command to delete {typeof(TEntity).Name}");
                 }
+                finally
+                {
+                    await connection.CloseAsync();
+                }
             }
         }
 
@@ -87,9 +99,16 @@ namespace VaultInfrastructure.Data
         {
             using (var connection = CreateConnection())
             {
-                var query = command.ToQuery();
-                var queryResult = await connection.QueryFirstOrDefaultAsync<TEntity>(query, command.Parameters);
-                return queryResult;
+                try
+                {
+                    var query = command.ToQuery();
+                    var queryResult = await connection.QueryFirstOrDefaultAsync<TEntity>(query, command.Parameters);
+                    return queryResult;
+                }
+                finally
+                {
+                    await connection.CloseAsync();
+                }
             }
         }
 
@@ -115,6 +134,10 @@ namespace VaultInfrastructure.Data
                 catch (Exception ex)
                 {
                     return new Result(ex);
+                }
+                finally
+                {
+                    await connection.CloseAsync();
                 }
             }
         }

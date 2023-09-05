@@ -20,3 +20,5 @@
 /VaultApp/VaultInfrastructure.Tests/obj
 /VaultApp/VaultApplication.Tests/bin/Debug/net7.0
 /VaultApp/VaultApplication.Tests/obj
+/VaultApp/VaultAppApi.Tests/bin/Debug/net7.0
+/VaultApp/VaultAppApi.Tests/obj

@@ -33,7 +33,13 @@ namespace VaultAppApi.Controllers
                 return Conflict(commandResult);
             if (!commandResult.Success)
                 return BadRequest(commandResult.Metadata.Errors);
-            return Ok(commandResult);
+
+            return Ok(new Result(new
+            {
+                Token = ((VaultDomain.Entities.User)commandResult.Payload).ExtractJwt(
+                    _configuration.GetSection("Token").Value
+                )
+            }));
         }
 
         [HttpPost("authenticate")]
@@ -47,7 +53,7 @@ namespace VaultAppApi.Controllers
                         _configuration.GetSection("Token").Value
                     )
                 }));
-            return BadRequest(commandResult);
+            return Unauthorized(commandResult);
         }
     }
 }

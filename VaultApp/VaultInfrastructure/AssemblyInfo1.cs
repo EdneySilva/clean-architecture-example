@@ -17,4 +17,5 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("edac7202-b238-4911-97ad-7f99c278786d")]
 [assembly: InternalsVisibleTo("VaultInfrastructure.Tests")]
+[assembly: InternalsVisibleTo("VaultAppApi.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
