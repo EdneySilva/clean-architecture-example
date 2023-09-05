@@ -1,4 +1,6 @@
-﻿namespace VaultDomain.ValueObjects
+﻿using System.Text.Json.Serialization;
+
+namespace VaultDomain.ValueObjects
 {
     public struct Result
     {
